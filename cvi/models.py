@@ -24,7 +24,7 @@ class TwoFARToken(Document):
 
 
 def init():
-    connect()
+    connect(db='CVI')
     pass
 
 
