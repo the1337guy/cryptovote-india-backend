@@ -12,6 +12,10 @@ hug = "*"
 sqlalchemy = "*"
 "pg8000" = "*"
 mongoengine = "*"
+addict = "*"
+gevent = "*"
+marshmallow = "*"
+httpie = "*"
 
 
 [dev-packages]

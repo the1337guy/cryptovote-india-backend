@@ -1,10 +1,13 @@
 # mpatch
-from gevent import monkey
-monkey.patch_all()
+try:
+    from gevent import monkey
+    monkey.patch_all()
+except Exception:
+    pass
 
-from cvi.routes import routes
+from cvi.routes import routes  # noqa
 
-import hug
+import hug  # noqa
 
 router = hug.route.API(__name__)
 

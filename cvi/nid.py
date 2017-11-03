@@ -23,4 +23,9 @@ class DummyNID(Document):
         self.redeemed = True
         pass
 
+    @classmethod
+    def get_nid(cls, id):
+        # return cls.objects.get(id=id)
+        return cls()
+
     pass
