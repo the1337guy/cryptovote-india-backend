@@ -19,6 +19,7 @@ def auth_handler(data):
     twofaexp = nid.auth_2fa()
     tok = TwoFARToken(complete=False, success=False, wanted=twofaexp)
     tok.save()
+    print('Saved 2fa token with id: {}'.format(tok.id))
     return make_success(tok.id)
 
 
