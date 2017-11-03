@@ -16,6 +16,7 @@ addict = "*"
 gevent = "*"
 marshmallow = "*"
 httpie = "*"
+pynacl = "*"
 
 
 [dev-packages]
