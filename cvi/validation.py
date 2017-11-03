@@ -1,3 +1,4 @@
+# This code is explicitly in the public domain
 from addict import Dict
 
 
