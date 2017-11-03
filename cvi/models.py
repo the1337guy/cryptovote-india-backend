@@ -17,8 +17,8 @@ class Vote(Document):
 
 
 class TwoFARToken(Document):
-    complete = fields.BinaryField()
-    success = fields.BinaryField()
+    complete = fields.BooleanField()
+    success = fields.BooleanField()
     wanted = fields.IntField()
     pass
 

@@ -4,7 +4,7 @@ from mongoengine import Document, fields
 # Dummy NID
 class DummyNID(Document):
     pub = fields.StringField()  # base64-encoded 32-byte public key
-    redeemed = fields.BinaryField()
+    redeemed = fields.BooleanField()
 
     @staticmethod
     def is_valid_id(id):
