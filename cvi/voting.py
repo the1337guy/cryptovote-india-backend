@@ -21,26 +21,27 @@ def vote_handler(data):
     try:
         tok = TwoFARToken.objects.get(id=data.tokid)
     except TwoFARToken.DoesNotExist:
-        return make_error('No such token m8')
+        return make_error('NOTOKEN', 'No token found')
     o = tok.origin
     vk = VerifyKey(o.pub, encoder=HexEncoder)
     try:
         valid = vk.verify(data.message.encode(),
                           binascii.unhexlify(data.signature))
     except binascii.Error:
-        return make_error('Bad encoding m8')
+        return make_error('BADENCODING', 'Invalid encoding.')
     except BadSignatureError:
-        return make_error('No fraud m8')
+        return make_error('INVALIDSIG', 'Invalid signature.')
     try:
         j = json.loads(valid)
     except json.JSONDecodeError:
-        return make_error('Invalid encoding m8')
+        return make_error('BADENCODING', 'Invalid encoding.')
+
     if 'optid' not in j or not isinstance(j['optid'], int):
-        return make_error('Option not found')
+        return make_error('INVALIDSCHEMA', 'Option not found')
     v = Vote()
     v.ts = time.time()
     v.origin = o
     v.message = valid
     v.signature = data.signature
     v.save()
-    return make_success('Nice, vote registered')
+    return make_success('Vote registered')

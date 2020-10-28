@@ -13,5 +13,5 @@ from .auth import auth_handler, twofa_handler
 routes = (
     ('post', '/api/auth', auth_handler),
     ('post', '/api/2faresp', twofa_handler),
-    #    ('post', '/api/vote', vote_handler),
+    # ('post', '/api/vote', vote_handler),
 )

@@ -1,7 +1,7 @@
 from mongoengine import Document, connect, fields
 
-
-class CVA(Document):
+# Local Voting District
+class LocalVotingDistrict(Document):
     pin_code = fields.IntField()
     voteOptions = fields.DictField()
     pass
@@ -9,19 +9,20 @@ class CVA(Document):
 
 # Dummy NID
 class DummyNID(Document):
-    cva = fields.ReferenceField(CVA)
+    lvd = fields.ReferenceField(LocalVotingDistrict)
     pub = fields.StringField()  # hex-encoded 32-byte public key
     redeemed = fields.BooleanField()
 
+    # TODO
     @staticmethod
-    def is_valid_id(id):
+    def is_valid_id():
         return True
 
     def auth_2fa(self):
         # This returns the expected 2FA response
         return 0
 
-    def get_address(self):
+    def get_local_voting_district(self):
         # This returns the PIN code for the address
         return 0
 

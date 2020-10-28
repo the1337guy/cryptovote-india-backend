@@ -2,7 +2,7 @@ import requests
 from addict import Dict
 
 # Step one
-nid = input('Enter NID retard: ')
+nid = input('Enter the NID: ')
 resp = requests.post(
     'http://localhost:8000/api/auth', json={
         'obj': {

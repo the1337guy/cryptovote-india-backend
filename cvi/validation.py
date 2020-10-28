@@ -2,12 +2,12 @@
 from addict import Dict
 
 
-def make_error(err):
-    return {'errored': True, 'errors': [err]}
+def make_error(code, err):
+    return {'errored': True, 'code': code, 'errors': [err]}
 
 
 def make_success(val):
-    return {'errored': False, 'goahead': True, 'obj': val}
+    return {'errored': False,  'obj': val}
 
 
 def ensure_valid(schema):
