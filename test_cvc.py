@@ -11,6 +11,10 @@ resp = requests.post(
     })
 print('Response code: {}'.format(resp.status_code))
 print('Result: {}'.format(resp.json()))
+if resp.status_code != 200:
+    print('Got a non-200 response.')
+    exit()
+
 s1r = Dict(resp.json())
 cresp = int(input('Enter challenge response: '))
 s1resp = requests.post(

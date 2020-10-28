@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 from .validation import ensure_valid, make_error, make_success
 from .models import DummyNID, TwoFARToken
 import nacl.encoding
@@ -29,6 +29,8 @@ def auth_handler(data):
 class THSchema(Schema):
     tokid = fields.String(required=True)
     cresp = fields.Int(required=True)
+
+    pubkey = fields.String(required=True, validate=validate.Length(64))
     pass
 
 
@@ -46,15 +48,11 @@ def twofa_handler(data):
         nationalid = tok.origin
         lvd = nationalid.lvd
 
-        sk = nacl.signing.SigningKey.generate()
-        nationalid.pub = sk.verify_key.encode(encoder=nacl.encoding.HexEncoder).decode()  # noqa
+        vk = nacl.signing.VerifyKey(data.pubkey, encoder=nacl.encoding.HexEncoder)
+        nationalid.pub = vk.encode(encoder=nacl.encoding.HexEncoder).decode()  # noqa
         nationalid.save()
 
         return make_success({
-            'options': lvd.voteOptions,
-            'keypair': {
-                'pub': sk.verify_key.encode(encoder=nacl.encoding.HexEncoder).decode(),
-                'priv': sk.encode(encoder=nacl.encoding.HexEncoder).decode(),
-            }
+            'options': lvd.voteOptions
         })
     pass

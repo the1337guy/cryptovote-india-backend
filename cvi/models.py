@@ -1,5 +1,6 @@
 from mongoengine import Document, connect, fields
 
+
 # Local Voting District
 class LocalVotingDistrict(Document):
     pin_code = fields.IntField()
