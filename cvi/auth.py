@@ -48,6 +48,8 @@ def twofa_handler(data):
         tok.save()
 
         nationalid = tok.origin
+        if nationalid.redeemed:
+            return make_error('ALREADYREDEEMED', 'Already redeemed. No further change of pubkey allowed.')
         lvd = nationalid.lvd
 
         vk = nacl.signing.VerifyKey(data.pubkey, encoder=nacl.encoding.HexEncoder)
