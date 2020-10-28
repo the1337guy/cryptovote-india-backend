@@ -8,10 +8,10 @@
 # 6. API verifies it with the aforementioned public key
 # 7. Record is saved in database.
 from .auth import auth_handler, twofa_handler
-# from .voting import vote_handler
+from .voting import vote_handler
 
 routes = (
     ('post', '/api/auth', auth_handler),
     ('post', '/api/2faresp', twofa_handler),
-    # ('post', '/api/vote', vote_handler),
+    ('post', '/api/vote', vote_handler),
 )

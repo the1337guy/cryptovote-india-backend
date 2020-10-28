@@ -1,5 +1,6 @@
 # This code is explicitly in the public domain
 from addict import Dict
+from marshmallow import ValidationError
 
 
 def make_error(code, err):
@@ -7,7 +8,7 @@ def make_error(code, err):
 
 
 def make_success(val):
-    return {'errored': False,  'obj': val}
+    return {'errored': False, **val}
 
 
 def ensure_valid(schema):
@@ -16,12 +17,13 @@ def ensure_valid(schema):
             if not isinstance(obj, dict):
                 return 'Go fuck yourself'
             s = schema()
-            res, errs = s.load(obj)
-            print('Response: {}, Errors: {}'.format(res, errs))
-            if len(errs) != 0:
-                return {'errored': True, 'errors': errs}
-            else:
-                return func(Dict(res))
+            try:
+                return func(Dict(s.load(obj)))
+            except ValidationError as err:
+                return {
+                    'errored': True,
+                    'errors': err.messages
+                }
             pass
 
         return tfun

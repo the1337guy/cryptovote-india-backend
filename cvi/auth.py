@@ -13,7 +13,6 @@ class AHSchema(Schema):
 # This generates a 2FA challenge, that must be answered with 2FA handler (see below)
 @ensure_valid(AHSchema)
 def auth_handler(data):
-    print(data)
     try:
         nid = DummyNID.get_nid(data.national_id)
     except DummyNID.DoesNotExist:
@@ -23,7 +22,9 @@ def auth_handler(data):
     tok.origin = nid
     tok.save()
     print('Saved 2fa token with id: {}'.format(tok.id))
-    return make_success(str(tok.id))
+    return make_success({
+        'token': str(tok.id)
+    })
 
 
 class THSchema(Schema):
@@ -37,6 +38,7 @@ class THSchema(Schema):
 # On validation of 2FA this generates the initial keypair. This is temporary so far.
 @ensure_valid(THSchema)
 def twofa_handler(data):
+    print('Request data:', data)
     tok = TwoFARToken.objects.get(id=data.tokid)
     if tok.wanted != data.cresp:
         return make_error('WRONG2FA', 'Wrong 2FA response')
@@ -53,6 +55,6 @@ def twofa_handler(data):
         nationalid.save()
 
         return make_success({
-            'options': lvd.voteOptions
+            'success': True
         })
     pass

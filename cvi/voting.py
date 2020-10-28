@@ -1,16 +1,16 @@
 from marshmallow import Schema, fields
 from .validation import ensure_valid, make_error, make_success
-from .models import TwoFARToken, Vote
+from .models import DummyNID, Vote
 from nacl.signing import VerifyKey
 from nacl.encoding import HexEncoder
 from nacl.exceptions import BadSignatureError
 import binascii
 import json
-import time
+import datetime
 
 
 class VHSchema(Schema):
-    tokid = fields.String(required=True)
+    nid = fields.String(required=True)
     message = fields.String(required=True)
     signature = fields.String(required=True)
     pass
@@ -18,12 +18,18 @@ class VHSchema(Schema):
 
 @ensure_valid(VHSchema)
 def vote_handler(data):
+    user = None
     try:
-        tok = TwoFARToken.objects.get(id=data.tokid)
-    except TwoFARToken.DoesNotExist:
+        user = DummyNID.objects.get(id=data.nid)
+    except DummyNID.DoesNotExist:
         return make_error('NOTOKEN', 'No token found')
-    o = tok.origin
-    vk = VerifyKey(o.pub, encoder=HexEncoder)
+
+    if user.redeemed:
+        return make_error('ALREADYREDEEMED', 'Already redeemed')
+    vk = VerifyKey(user.pub, encoder=HexEncoder)
+    user.redeemed = True
+    user.save()
+
     try:
         valid = vk.verify(data.message.encode(),
                           binascii.unhexlify(data.signature))
@@ -39,9 +45,11 @@ def vote_handler(data):
     if 'optid' not in j or not isinstance(j['optid'], int):
         return make_error('INVALIDSCHEMA', 'Option not found')
     v = Vote()
-    v.ts = time.time()
-    v.origin = o
-    v.message = valid
+    v.ts = datetime.datetime.now()
+    v.origin = user
+    v.message = valid.decode()
     v.signature = data.signature
     v.save()
-    return make_success('Vote registered')
+    return make_success({
+        'success': True
+    })

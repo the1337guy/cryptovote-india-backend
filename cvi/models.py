@@ -1,3 +1,4 @@
+import os
 from mongoengine import Document, connect, fields
 
 
@@ -10,6 +11,7 @@ class LocalVotingDistrict(Document):
 
 # Dummy NID
 class DummyNID(Document):
+    name = fields.StringField()
     lvd = fields.ReferenceField(LocalVotingDistrict)
     pub = fields.StringField()  # hex-encoded 32-byte public key
     redeemed = fields.BooleanField()
@@ -52,7 +54,8 @@ class TwoFARToken(Document):
 
 
 def init():
-    connect(db='CVI')
+    url = os.environ.get('CVI_MONGOURL', 'mongodb://localhost:27801')
+    print(connect(db='CVI', host=url))
     pass
 
 
