@@ -54,7 +54,7 @@ class TwoFARToken(Document):
 
 
 def init():
-    url = os.environ.get('CVI_MONGOURL', 'mongodb://localhost:27801')
+    url = os.environ.get('CVI_MONGOURL', 'mongodb://localhost:27017')
     print(connect(db='CVI', host=url))
     pass
 
