@@ -13,6 +13,7 @@ addict = "*"
 gevent = "*"
 marshmallow = "*"
 pynacl = "*"
+gunicorn = {extras = ["gevent"], version = "*"}
 
 [requires]
 python_version = "3.6"

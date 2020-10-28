@@ -102,3 +102,4 @@ ENV/
 
 # Pipenv bs
 Pipfile.lock
+data/

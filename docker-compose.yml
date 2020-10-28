@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27901:27017
+    volumes:
+      - ./data/db:/data/db

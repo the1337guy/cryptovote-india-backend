@@ -37,7 +37,7 @@ class THSchema(Schema):
 def twofa_handler(data):
     tok = TwoFARToken.objects.get(id=data.tokid)
     if tok.wanted != data.cresp:
-        return make_error('Fail! Try again.')
+        return make_error('WRONG2FA', 'Wrong 2FA response')
     else:
         tok.complete = True
         tok.success = True
